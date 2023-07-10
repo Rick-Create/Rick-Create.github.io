@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>first class</title>
+    <url>/2023/07/10/first-class/</url>
+    <content><![CDATA[<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="right">B</td>
+<td align="center">C</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td align="right">b</td>
+<td align="center">c</td>
+</tr>
+</tbody></table>
+<ul>
+<li>无序列表1</li>
+<li>无序列表2</li>
+</ul>
+<ol>
+<li>有序列表1</li>
+<li>有序列表2</li>
+</ol>
+<p><strong>加粗</strong></p>
+<p><em>斜体</em></p>
+<p><em><strong>粗体斜体</strong></em></p>
+<blockquote>
+<p>这是一个引用</p>
+<blockquote>
+<p>引用套嵌</p>
+</blockquote>
+</blockquote>
+<hr>
+<p><code>Hello world</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;cstring&gt;</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line"> </span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">class CMyString</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	CMyString(const char* pData = nullptr);</span><br><span class="line">	CMyString(const CMyString&amp; str);</span><br><span class="line">	~CMyString(void);</span><br><span class="line"> </span><br><span class="line">	CMyString&amp; operator = (const CMyString&amp; str);</span><br><span class="line"> </span><br><span class="line">	void Print();</span><br><span class="line"> </span><br><span class="line">private:</span><br><span class="line">	char* m_pData;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.baidu.com/">这是百度的链接</a></p>
+<p><img src="https://img2.baidu.com/it/u=3063029439,2036275027&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800" alt="这是一个图片"></p>
+<p><del>世界是平坦的。</del> 我们现在知道世界是圆的。</p>
+]]></content>
+      <categories>
+        <category>Markdown 语法</category>
+      </categories>
+      <tags>
+        <tag>第一篇</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/07/10/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+</search>

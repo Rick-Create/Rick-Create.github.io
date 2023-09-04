@@ -27,7 +27,7 @@
 <meta property="og:description" content="C++11新特性：enum与enum class的区别enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。 文件目录 防止污染空间 可以前置声明 需要强制转换  防止污染空间12345678910enum MyEnum&amp;#123;    ME_FIRST,    ME_SECOND&amp;#125;enum MyEnum2&amp;#1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-04T02:40:33.000Z">
-<meta property="article:modified_time" content="2023-09-04T03:03:54.504Z">
+<meta property="article:modified_time" content="2023-09-04T03:12:30.869Z">
 <meta property="article:author" content="Rick">
 <meta property="article:tag" content="C++语法">
 <meta name="twitter:card" content="summary">
@@ -227,7 +227,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-09-04 10:40:33 / 修改时间：11:03:54" itemprop="dateCreated datePublished" datetime="2023-09-04T10:40:33+08:00">2023-09-04</time>
+      <time title="创建时间：2023-09-04 10:40:33 / 修改时间：11:12:30" itemprop="dateCreated datePublished" datetime="2023-09-04T10:40:33+08:00">2023-09-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,7 +275,10 @@
 </ul>
 </li>
 <li>reinterpret_cast：用法：reinterpret_cast (expression)<ul>
-<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。<br> -const**_cast**：用法：const_cast (expression)</li>
+<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。</li>
+</ul>
+</li>
+<li>const**_cast**：用法：const_cast (expression)<ul>
 <li>该运算符用来修改类型的const或volatile属性，除了const或volatile修饰外，type-id和expression类型是一样的。如常量指针变成非常量指针，且仍指向原来对象。<br>————————————————</li>
 </ul>
 </li>

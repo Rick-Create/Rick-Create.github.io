@@ -102,7 +102,10 @@
 </ul>
 </li>
 <li>reinterpret_cast：用法：reinterpret_cast (expression)<ul>
-<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。<br> -const**_cast**：用法：const_cast (expression)</li>
+<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。</li>
+</ul>
+</li>
+<li>const**_cast**：用法：const_cast (expression)<ul>
 <li>该运算符用来修改类型的const或volatile属性，除了const或volatile修饰外，type-id和expression类型是一样的。如常量指针变成非常量指针，且仍指向原来对象。<br>————————————————</li>
 </ul>
 </li>

@@ -1,38 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Extent关键字</title>
-    <url>/2023/09/04/Extent%E5%85%B3%E9%94%AE%E5%AD%97/</url>
-    <content><![CDATA[<h2 id="C-中extern关键字用法小结"><a href="#C-中extern关键字用法小结" class="headerlink" title="C++中extern关键字用法小结"></a>C++中extern关键字用法小结</h2><p>总结C++中关于extern关键字的用法。</p>
-<p>1.变量的生明和定义中<br>C++语言支持分离式编译机制，该机制允许将程序分割为若干个文件，每个文件可被独立编译。为了将程序分为许多文件，则需要在文件中共享代码，例如一个文件的代码可能需要另一个文件中中定义的变量。</p>
-<p>为了支持分离式编译，C++允许将声明和定义分离开来。变量的声明规定了变量的类型和名字，即使一个名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明。定义则负责创建与名字关联的实体，定义还申请存储空间。</p>
-<p>如果想声明一个变量而非定义它，就在变量名前添加extern关键字，而且不要显式地初始化变量：</p>
-<p>extern int i;  &#x2F;&#x2F;声明i而非定义<br>int j;         &#x2F;&#x2F;声明并定义i<br>但我们也可以给由extern关键字标记的变量赋一个初始值，但这样就不是一个声明了，而是一个定义：</p>
-<p>extern int v &#x3D; 2;<br>int v &#x3D; 2;     &#x2F;&#x2F;这两个语句效果完全一样，都是v的定义<br>注意： 变量能且只能被定义一次，但是可以被声明多次。</p>
-<p>2.在多个文件中共享const对象<br>默认情况下，一个const对象仅在本文件内有效，如果多个文件中出现了同名的const变量时，其实等同于在不同的文件中分别定义了独立的变量。</p>
-<p>某些时候有这样一种const变量，它的初始值不是一个常量表达式，但又确实有必要在文件间共享。这种情况下，我们不希望编译器为每个文件分别生成独立的变量。我们想让这类const对象像其他非常量对象一样工作，也就是说，只在一个文件中定义const，而在其他多个文件中声明并使用它。</p>
-<p>方法是对于const变量不管是声明还是定义都添加extern关键字，这样只需要定义一次就可以了：</p>
-<p>&#x2F;&#x2F;file1.cpp定义并初始化和一个常量，该常量能被其他文件访问<br>extern const int bufferSize &#x3D; function();<br>&#x2F;&#x2F;file1.h头文件<br>extern const int bufferSize; &#x2F;&#x2F;与file1.cpp中定义的是同一个<br>file1.h头文件中的声明也由extern做了限定，其作用是指明bufferSize并非本文件独有，它的定义将出现在别处。</p>
-<p>3.模板的控制实例化<br>当两个或者多个独立编译的源文件中使用了相同的模板并且提供了相同的模板参数时，每个文件中都会有该模板的一个实例。</p>
-<p>在大系统中，在多个文件中实例化相同的模板的额外开销可能非常严重，在C++11新标准中，我们可以通过显式实例化来避免这种开销。一个显式实例化具有如下形式：</p>
-<p>extern template declaration; &#x2F;&#x2F;实例化声明<br>template declaration;        &#x2F;&#x2F;实例化定义<br>declaration是一个类或函数的声明，其中所有的模板参数都已经被替换成为模板实参。例如：</p>
-<p>extern template class vec<string>;       &#x2F;&#x2F;声明<br>template int sum(const int, const int);  &#x2F;&#x2F;定义<br>当编译器遇到extern模板声明时，它不会在本文件中生成实例化代码，将一个实例化声明为extern就表示承诺在程序的其他位置有该实例化的一个非extern定义。对于一个给定的实例化版本，可能有多个extern声明，但必须只有一个定义。</p>
-<p>由于编译器在使用一个模板时自动对其实例化，因此extern声明必须出现在任何使用此实例化吧版本的代码之前。</p>
-<p>由于以上讨论可知：extern一般是使用在多文件之间需要共享某些代码时</p>
-<blockquote>
-<blockquote>
-<p><a href="https://www.cnblogs.com/broglie/p/5524932.html">https://www.cnblogs.com/broglie/p/5524932.html</a></p>
-</blockquote>
-</blockquote>
-]]></content>
-      <categories>
-        <category>每日C++</category>
-      </categories>
-      <tags>
-        <tag>C++语法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++ enum与enum class的区别</title>
     <url>/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h2 id="C-11新特性：enum与enum-class的区别"><a href="#C-11新特性：enum与enum-class的区别" class="headerlink" title="C++11新特性：enum与enum class的区别"></a>C++11新特性：enum与enum class的区别</h2><p>enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。</p>
@@ -84,72 +52,27 @@
       </tags>
   </entry>
   <entry>
-    <title>lambda表达式</title>
-    <url>/2023/09/04/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="C-Lambda表达式的完整介绍"><a href="#C-Lambda表达式的完整介绍" class="headerlink" title="C++ Lambda表达式的完整介绍"></a>C++ Lambda表达式的完整介绍</h2><p>c++在c++11标准中引入了lambda表达式，一般用于定义匿名函数，使得代码更加灵活简洁。lambda表达式与普通函数类似，也有参数列表、返回值类型和函数体，只是它的定义方式更简洁，并且可以在函数内部定义。</p>
-<h3 id="什么是Lambda表达式"><a href="#什么是Lambda表达式" class="headerlink" title="什么是Lambda表达式"></a>什么是Lambda表达式</h3><p>最常见的lambda的表达式写法如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int v1, int v2) -&gt; int &#123; return v1 + v2; &#125;</span><br><span class="line">int sum = plus(1, 2);</span><br></pre></td></tr></table></figure>
-<p>这里只是计算两个数的和，我们一般情况下肯定是不会这么用的，更多的时候，我们都是和stl的一些算法结合使用，例如自定义一个结构体的排序规则和打印。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">struct Item</span><br><span class="line">&#123;</span><br><span class="line">    Item(int aa, int bb) : a(aa), b(bb) &#123;&#125; </span><br><span class="line">    int a;</span><br><span class="line">    int b;</span><br><span class="line">&#125;;</span><br><span class="line">	</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;Item&gt; vec;</span><br><span class="line">    vec.push_back(Item(1, 19));</span><br><span class="line">    vec.push_back(Item(10, 3));</span><br><span class="line">    vec.push_back(Item(3, 7));</span><br><span class="line">    vec.push_back(Item(8, 12));</span><br><span class="line">    vec.push_back(Item(2, 1));</span><br><span class="line"></span><br><span class="line">    // 根据Item中成员a升序排序</span><br><span class="line">    std::sort(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; v1, const Item&amp; v2) &#123; return v1.a &lt; v2.a; &#125;);</span><br><span class="line"></span><br><span class="line">    // 打印vec中的item成员</span><br><span class="line">    std::for_each(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; item) &#123; std::cout &lt;&lt; item.a &lt;&lt; &quot; &quot; &lt;&lt; item.b &lt;&lt; std::endl; &#125;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样的写法让我们代码更加简洁、清晰，可读性更强。</p>
-<ol>
-<li>[captures] <tparams> <em><strong>(optional C++20)</strong></em>(params) lambda-specifiers{body}</li>
-<li>[captures] (params) trailing-return-type{body}</li>
-<li>[captures] (params) {body}</li>
-<li>[captures] lambda-specifiers <em><strong>(optional C++20)</strong></em>{body}</li>
-</ol>
-<p>下面介绍一下lambda的四种表达式的含义，以及表达式中各个成分的，其实说白就是在自己理解的基础上翻译一下官方文档。</p>
-<p>###四种表达式的含义<br>（1）完整的lambda表达式，包含了lambda表达式的所有成分。</p>
-<p>（2）常量lambda表达式，捕获的变量都是常量，不能在lambda表达式的body中进行修改。</p>
-<p>（3）和（2）基本一致，唯一的区别就是，lambda表达式的函数返回值可以通过函数体推导出来。一般情况函数返回值类型明确或者没有返回值的情况下可以这样写。</p>
-<p>（4）lambda表达式的函数没有任何参数，但是可以添加lambda-specifiers，lambda-specifiers是什么我们后续再介绍。</p>
-<h3 id="lambda表达式各个成员的解释"><a href="#lambda表达式各个成员的解释" class="headerlink" title="lambda表达式各个成员的解释"></a>lambda表达式各个成员的解释</h3><p><strong>captures 捕获列表</strong>，lambda可以把上下文变量以值或引用的方式捕获，在body中直接使用。</p>
-<p><strong>tparams 模板参数列表</strong>(c++20引入)，让lambda可以像模板函数一样被调用。</p>
-<p><strong>params 参数列表</strong>，有一点需要注意，在c++14之后允许使用auto左右参数类型。</p>
-<p><strong>lambda-specifiers lambda说明符</strong>， 一些可选的参数，这里不多介绍了，有兴趣的读者可以去官方文档上看。这里比较常用的参数就是mutable和exception。其中，表达式(1)中没有trailing-return-type，是因为包含在这一项里面的。</p>
-<p><strong>trailing-return-type</strong> 返回值类型，一般可以省略掉，由编译器来推导。</p>
-<p><strong>body 函数体</strong>，函数的具体逻辑。</p>
-<h3 id="捕获列表"><a href="#捕获列表" class="headerlink" title="捕获列表"></a>捕获列表</h3><p>上面介绍完了lambda表达式的各个成分，其实很多部分和正常的函数没什么区别，其中最大的一个不同点就是捕获列表。我在刚开始用lambda表达式的时候，还一直以为这个没啥用，只是用一个 [] 来标志着这是一个lambda表达式。后来了解了才知道，原来这个捕获列表如此强大，甚至我觉得捕获列表就是lambda表达式的灵魂。下面先介绍几种常用的捕获方式。</p>
-<p><strong>[]</strong> 什么也不捕获，无法lambda函数体使用任何</p>
-<p><strong>[&#x3D;]</strong> 按值的方式捕获所有变量</p>
-<p><strong>[&amp;]</strong> 按引用的方式捕获所有变量</p>
-<p><strong>[&#x3D;, &amp;a]</strong> 除了变量a之外，按值的方式捕获所有局部变量，变量a使用引用的方式来捕获。这里可以按引用捕获多个，例如 [&#x3D;, &amp;a, &amp;b,&amp;c]。这里注意，如果前面加了&#x3D;，后面加的具体的参数必须以引用的方式来捕获，否则会报错。</p>
-<p><strong>[&amp;, a]</strong> 除了变量a之外，按引用的方式捕获所有局部变量，变量a使用值的方式来捕获。这里后面的参数也可以多个，例如 [&amp;, a, b, c]。这里注意，如果前面加了&amp;，后面加的具体的参数必须以值的方式来捕获。</p>
-<p><strong>[a, &amp;b]</strong> 以值的方式捕获a，引用的方式捕获b，也可以捕获多个。</p>
-<p><strong>[this]</strong> 在成员函数中，也可以直接捕获this指针，其实在成员函数中，[&#x3D;]和[&amp;]也会捕获this指针。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 3;</span><br><span class="line">    int b = 5;</span><br><span class="line">    </span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func1 = [a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func1();</span><br><span class="line"></span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func2 = [=] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func2();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func3 = [&amp;a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func3();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func4 = [&amp;] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func4();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="编译器如何看待Lambda表达式"><a href="#编译器如何看待Lambda表达式" class="headerlink" title="编译器如何看待Lambda表达式"></a>编译器如何看待Lambda表达式</h3><p>我们把lambda表达式看成一个函数，那编译器怎么看待我们协的lambda呢？</p>
-<p>其实，编译器会把我们写的lambda表达式翻译成一个类，并重载 operator()来实现。比如我们写一个lambda表达式为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int a, int b) -&gt; int &#123; return a + b; &#125;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-<p>那么编译器会把我们写的表达式翻译为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">LambdaClass plus;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-<p>调用的时候编译器会生成一个Lambda的对象，并调用opeartor ()函数。<strong>（备注：这里的编译的翻译结果并不和真正的结果完全一致，只是把最主要的部分体现出来，其他的像类到函数指针的转换函数均省略）</strong></p>
-<p>上面是一种调用方式，那么如果我们写一个复杂一点的lambda表达式，表达式中的成分会如何与类的成分对应呢？我们再看一个 值捕获 例子。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) -&gt; int &#123; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-
-<p>编译器的翻译结果为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int xx, int yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int x;</span><br><span class="line">    int y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int x = 1; int y = 2;</span><br><span class="line">LambdaClass plus(x, y);</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-
-<p>其实这里就可以看出，值捕获时，编译器会把捕获到的值作为类的成员变量，并且变量是以值的方式传递的。需要注意的时，如果所有的参数都是值捕获的方式，那么生成的operator()函数是const函数的，是无法修改捕获的值的，哪怕这个修改不会改变lambda表达式外部的变量，如果想要在函数内修改捕获的值，需要加上关键字 mutable。向下面这样的形式。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) mutable -&gt; int &#123; x++; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-<p>我们再来看一个引用捕获的例子。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [&amp;] (int a, int b) -&gt; int &#123; x++; return x + y + a + b;&#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
-<p>编译器的翻译结果为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int&amp; xx, int&amp; yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b)</span><br><span class="line">    &#123;</span><br><span class="line">        x++;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int &amp;x;</span><br><span class="line">    int &amp;y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到以引用的方式捕获变量，和值捕获的方式有3个不同的地方：1. 参数引用的方式进行传递; 2. 引用捕获在函数体修改变量，会直接修改lambda表达式外部的变量；3. opeartor()函数不是const的。</p>
-<p>针对上面的集中情况，我们把lambda的各个成分和类的各个成分对应起来就是如下的关系:</p>
-<p><strong>捕获列表</strong>，对应LambdaClass类的<strong>private成员</strong>。</p>
-<p><strong>参数列表</strong>，对应LambdaClass类的成员函数的operator()的形参列表</p>
-<p><strong>mutable</strong>，对应 LambdaClass类成员函数 <strong>operator() 的const属性 ，但是只有在捕获列表捕获的参数不含有引用捕获的情况下才会生效</strong>，因为捕获列表只要包含引用捕获，那operator()函数就一定是非const函数。</p>
-<p><strong>返回类型</strong>，对应 LambdaClass类成员函数 <strong>operator() 的返回类型</strong></p>
-<p><strong>函数体</strong>，对应 LambdaClass类成员函数 <strong>operator() 的函数体</strong>。</p>
-<p><strong>引用捕获和值捕获不同的一点就是，对应的成员是否为引用类型。</strong></p>
-<p>Copy From</p>
+    <title>Extent关键字</title>
+    <url>/2023/09/04/Extent%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <content><![CDATA[<h2 id="C-中extern关键字用法小结"><a href="#C-中extern关键字用法小结" class="headerlink" title="C++中extern关键字用法小结"></a>C++中extern关键字用法小结</h2><p>总结C++中关于extern关键字的用法。</p>
+<p>1.变量的生明和定义中<br>C++语言支持分离式编译机制，该机制允许将程序分割为若干个文件，每个文件可被独立编译。为了将程序分为许多文件，则需要在文件中共享代码，例如一个文件的代码可能需要另一个文件中中定义的变量。</p>
+<p>为了支持分离式编译，C++允许将声明和定义分离开来。变量的声明规定了变量的类型和名字，即使一个名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明。定义则负责创建与名字关联的实体，定义还申请存储空间。</p>
+<p>如果想声明一个变量而非定义它，就在变量名前添加extern关键字，而且不要显式地初始化变量：</p>
+<p>extern int i;  &#x2F;&#x2F;声明i而非定义<br>int j;         &#x2F;&#x2F;声明并定义i<br>但我们也可以给由extern关键字标记的变量赋一个初始值，但这样就不是一个声明了，而是一个定义：</p>
+<p>extern int v &#x3D; 2;<br>int v &#x3D; 2;     &#x2F;&#x2F;这两个语句效果完全一样，都是v的定义<br>注意： 变量能且只能被定义一次，但是可以被声明多次。</p>
+<p>2.在多个文件中共享const对象<br>默认情况下，一个const对象仅在本文件内有效，如果多个文件中出现了同名的const变量时，其实等同于在不同的文件中分别定义了独立的变量。</p>
+<p>某些时候有这样一种const变量，它的初始值不是一个常量表达式，但又确实有必要在文件间共享。这种情况下，我们不希望编译器为每个文件分别生成独立的变量。我们想让这类const对象像其他非常量对象一样工作，也就是说，只在一个文件中定义const，而在其他多个文件中声明并使用它。</p>
+<p>方法是对于const变量不管是声明还是定义都添加extern关键字，这样只需要定义一次就可以了：</p>
+<p>&#x2F;&#x2F;file1.cpp定义并初始化和一个常量，该常量能被其他文件访问<br>extern const int bufferSize &#x3D; function();<br>&#x2F;&#x2F;file1.h头文件<br>extern const int bufferSize; &#x2F;&#x2F;与file1.cpp中定义的是同一个<br>file1.h头文件中的声明也由extern做了限定，其作用是指明bufferSize并非本文件独有，它的定义将出现在别处。</p>
+<p>3.模板的控制实例化<br>当两个或者多个独立编译的源文件中使用了相同的模板并且提供了相同的模板参数时，每个文件中都会有该模板的一个实例。</p>
+<p>在大系统中，在多个文件中实例化相同的模板的额外开销可能非常严重，在C++11新标准中，我们可以通过显式实例化来避免这种开销。一个显式实例化具有如下形式：</p>
+<p>extern template declaration; &#x2F;&#x2F;实例化声明<br>template declaration;        &#x2F;&#x2F;实例化定义<br>declaration是一个类或函数的声明，其中所有的模板参数都已经被替换成为模板实参。例如：</p>
+<p>extern template class vec<string>;       &#x2F;&#x2F;声明<br>template int sum(const int, const int);  &#x2F;&#x2F;定义<br>当编译器遇到extern模板声明时，它不会在本文件中生成实例化代码，将一个实例化声明为extern就表示承诺在程序的其他位置有该实例化的一个非extern定义。对于一个给定的实例化版本，可能有多个extern声明，但必须只有一个定义。</p>
+<p>由于编译器在使用一个模板时自动对其实例化，因此extern声明必须出现在任何使用此实例化吧版本的代码之前。</p>
+<p>由于以上讨论可知：extern一般是使用在多文件之间需要共享某些代码时</p>
 <blockquote>
 <blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/384314474">https://zhuanlan.zhihu.com/p/384314474</a></p>
+<p><a href="https://www.cnblogs.com/broglie/p/5524932.html">https://www.cnblogs.com/broglie/p/5524932.html</a></p>
 </blockquote>
 </blockquote>
 ]]></content>
@@ -233,6 +156,83 @@
       </tags>
   </entry>
   <entry>
+    <title>lambda表达式</title>
+    <url>/2023/09/04/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="C-Lambda表达式的完整介绍"><a href="#C-Lambda表达式的完整介绍" class="headerlink" title="C++ Lambda表达式的完整介绍"></a>C++ Lambda表达式的完整介绍</h2><p>c++在c++11标准中引入了lambda表达式，一般用于定义匿名函数，使得代码更加灵活简洁。lambda表达式与普通函数类似，也有参数列表、返回值类型和函数体，只是它的定义方式更简洁，并且可以在函数内部定义。</p>
+<h3 id="什么是Lambda表达式"><a href="#什么是Lambda表达式" class="headerlink" title="什么是Lambda表达式"></a>什么是Lambda表达式</h3><p>最常见的lambda的表达式写法如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int v1, int v2) -&gt; int &#123; return v1 + v2; &#125;</span><br><span class="line">int sum = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>这里只是计算两个数的和，我们一般情况下肯定是不会这么用的，更多的时候，我们都是和stl的一些算法结合使用，例如自定义一个结构体的排序规则和打印。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">struct Item</span><br><span class="line">&#123;</span><br><span class="line">    Item(int aa, int bb) : a(aa), b(bb) &#123;&#125; </span><br><span class="line">    int a;</span><br><span class="line">    int b;</span><br><span class="line">&#125;;</span><br><span class="line">	</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;Item&gt; vec;</span><br><span class="line">    vec.push_back(Item(1, 19));</span><br><span class="line">    vec.push_back(Item(10, 3));</span><br><span class="line">    vec.push_back(Item(3, 7));</span><br><span class="line">    vec.push_back(Item(8, 12));</span><br><span class="line">    vec.push_back(Item(2, 1));</span><br><span class="line"></span><br><span class="line">    // 根据Item中成员a升序排序</span><br><span class="line">    std::sort(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; v1, const Item&amp; v2) &#123; return v1.a &lt; v2.a; &#125;);</span><br><span class="line"></span><br><span class="line">    // 打印vec中的item成员</span><br><span class="line">    std::for_each(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; item) &#123; std::cout &lt;&lt; item.a &lt;&lt; &quot; &quot; &lt;&lt; item.b &lt;&lt; std::endl; &#125;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的写法让我们代码更加简洁、清晰，可读性更强。</p>
+<ol>
+<li>[captures] <tparams> <em><strong>(optional C++20)</strong></em>(params) lambda-specifiers{body}</li>
+<li>[captures] (params) trailing-return-type{body}</li>
+<li>[captures] (params) {body}</li>
+<li>[captures] lambda-specifiers <em><strong>(optional C++20)</strong></em>{body}</li>
+</ol>
+<p>下面介绍一下lambda的四种表达式的含义，以及表达式中各个成分的，其实说白就是在自己理解的基础上翻译一下官方文档。</p>
+<p>###四种表达式的含义<br>（1）完整的lambda表达式，包含了lambda表达式的所有成分。</p>
+<p>（2）常量lambda表达式，捕获的变量都是常量，不能在lambda表达式的body中进行修改。</p>
+<p>（3）和（2）基本一致，唯一的区别就是，lambda表达式的函数返回值可以通过函数体推导出来。一般情况函数返回值类型明确或者没有返回值的情况下可以这样写。</p>
+<p>（4）lambda表达式的函数没有任何参数，但是可以添加lambda-specifiers，lambda-specifiers是什么我们后续再介绍。</p>
+<h3 id="lambda表达式各个成员的解释"><a href="#lambda表达式各个成员的解释" class="headerlink" title="lambda表达式各个成员的解释"></a>lambda表达式各个成员的解释</h3><p><strong>captures 捕获列表</strong>，lambda可以把上下文变量以值或引用的方式捕获，在body中直接使用。</p>
+<p><strong>tparams 模板参数列表</strong>(c++20引入)，让lambda可以像模板函数一样被调用。</p>
+<p><strong>params 参数列表</strong>，有一点需要注意，在c++14之后允许使用auto左右参数类型。</p>
+<p><strong>lambda-specifiers lambda说明符</strong>， 一些可选的参数，这里不多介绍了，有兴趣的读者可以去官方文档上看。这里比较常用的参数就是mutable和exception。其中，表达式(1)中没有trailing-return-type，是因为包含在这一项里面的。</p>
+<p><strong>trailing-return-type</strong> 返回值类型，一般可以省略掉，由编译器来推导。</p>
+<p><strong>body 函数体</strong>，函数的具体逻辑。</p>
+<h3 id="捕获列表"><a href="#捕获列表" class="headerlink" title="捕获列表"></a>捕获列表</h3><p>上面介绍完了lambda表达式的各个成分，其实很多部分和正常的函数没什么区别，其中最大的一个不同点就是捕获列表。我在刚开始用lambda表达式的时候，还一直以为这个没啥用，只是用一个 [] 来标志着这是一个lambda表达式。后来了解了才知道，原来这个捕获列表如此强大，甚至我觉得捕获列表就是lambda表达式的灵魂。下面先介绍几种常用的捕获方式。</p>
+<p><strong>[]</strong> 什么也不捕获，无法lambda函数体使用任何</p>
+<p><strong>[&#x3D;]</strong> 按值的方式捕获所有变量</p>
+<p><strong>[&amp;]</strong> 按引用的方式捕获所有变量</p>
+<p><strong>[&#x3D;, &amp;a]</strong> 除了变量a之外，按值的方式捕获所有局部变量，变量a使用引用的方式来捕获。这里可以按引用捕获多个，例如 [&#x3D;, &amp;a, &amp;b,&amp;c]。这里注意，如果前面加了&#x3D;，后面加的具体的参数必须以引用的方式来捕获，否则会报错。</p>
+<p><strong>[&amp;, a]</strong> 除了变量a之外，按引用的方式捕获所有局部变量，变量a使用值的方式来捕获。这里后面的参数也可以多个，例如 [&amp;, a, b, c]。这里注意，如果前面加了&amp;，后面加的具体的参数必须以值的方式来捕获。</p>
+<p><strong>[a, &amp;b]</strong> 以值的方式捕获a，引用的方式捕获b，也可以捕获多个。</p>
+<p><strong>[this]</strong> 在成员函数中，也可以直接捕获this指针，其实在成员函数中，[&#x3D;]和[&amp;]也会捕获this指针。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 3;</span><br><span class="line">    int b = 5;</span><br><span class="line">    </span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func1 = [a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func1();</span><br><span class="line"></span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func2 = [=] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func2();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func3 = [&amp;a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func3();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func4 = [&amp;] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func4();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编译器如何看待Lambda表达式"><a href="#编译器如何看待Lambda表达式" class="headerlink" title="编译器如何看待Lambda表达式"></a>编译器如何看待Lambda表达式</h3><p>我们把lambda表达式看成一个函数，那编译器怎么看待我们协的lambda呢？</p>
+<p>其实，编译器会把我们写的lambda表达式翻译成一个类，并重载 operator()来实现。比如我们写一个lambda表达式为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int a, int b) -&gt; int &#123; return a + b; &#125;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>那么编译器会把我们写的表达式翻译为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">LambdaClass plus;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>调用的时候编译器会生成一个Lambda的对象，并调用opeartor ()函数。<strong>（备注：这里的编译的翻译结果并不和真正的结果完全一致，只是把最主要的部分体现出来，其他的像类到函数指针的转换函数均省略）</strong></p>
+<p>上面是一种调用方式，那么如果我们写一个复杂一点的lambda表达式，表达式中的成分会如何与类的成分对应呢？我们再看一个 值捕获 例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) -&gt; int &#123; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+
+<p>编译器的翻译结果为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int xx, int yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int x;</span><br><span class="line">    int y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int x = 1; int y = 2;</span><br><span class="line">LambdaClass plus(x, y);</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+
+<p>其实这里就可以看出，值捕获时，编译器会把捕获到的值作为类的成员变量，并且变量是以值的方式传递的。需要注意的时，如果所有的参数都是值捕获的方式，那么生成的operator()函数是const函数的，是无法修改捕获的值的，哪怕这个修改不会改变lambda表达式外部的变量，如果想要在函数内修改捕获的值，需要加上关键字 mutable。向下面这样的形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) mutable -&gt; int &#123; x++; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>我们再来看一个引用捕获的例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [&amp;] (int a, int b) -&gt; int &#123; x++; return x + y + a + b;&#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>编译器的翻译结果为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int&amp; xx, int&amp; yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b)</span><br><span class="line">    &#123;</span><br><span class="line">        x++;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int &amp;x;</span><br><span class="line">    int &amp;y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到以引用的方式捕获变量，和值捕获的方式有3个不同的地方：1. 参数引用的方式进行传递; 2. 引用捕获在函数体修改变量，会直接修改lambda表达式外部的变量；3. opeartor()函数不是const的。</p>
+<p>针对上面的集中情况，我们把lambda的各个成分和类的各个成分对应起来就是如下的关系:</p>
+<p><strong>捕获列表</strong>，对应LambdaClass类的<strong>private成员</strong>。</p>
+<p><strong>参数列表</strong>，对应LambdaClass类的成员函数的operator()的形参列表</p>
+<p><strong>mutable</strong>，对应 LambdaClass类成员函数 <strong>operator() 的const属性 ，但是只有在捕获列表捕获的参数不含有引用捕获的情况下才会生效</strong>，因为捕获列表只要包含引用捕获，那operator()函数就一定是非const函数。</p>
+<p><strong>返回类型</strong>，对应 LambdaClass类成员函数 <strong>operator() 的返回类型</strong></p>
+<p><strong>函数体</strong>，对应 LambdaClass类成员函数 <strong>operator() 的函数体</strong>。</p>
+<p><strong>引用捕获和值捕获不同的一点就是，对应的成员是否为引用类型。</strong></p>
+<p>Copy From</p>
+<blockquote>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/384314474">https://zhuanlan.zhihu.com/p/384314474</a></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>左值与右值</title>
     <url>/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/</url>
     <content><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>左值：在内存中有可以访问的地址，对象是一个左值。</p>
@@ -285,23 +285,6 @@
       </tags>
   </entry>
   <entry>
-    <title>顶层Const和底层Const</title>
-    <url>/2023/09/04/%E9%A1%B6%E5%B1%82Const%E5%92%8C%E5%BA%95%E5%B1%82Const/</url>
-    <content><![CDATA[<h2 id="顶层-const-和底层-const"><a href="#顶层-const-和底层-const" class="headerlink" title="顶层 const 和底层 const"></a>顶层 const 和底层 const</h2><p>从 const 指针开始说起。const int* pInt; 和 int *const pInt &#x3D; &amp;someInt;，前者是 *pInt 不能改变，而后者是 pInt 不能改变。因此指针本身是不是常量和指针所指向的对象是不是常量就是两个互相独立的问题。用顶层表示指针本身是个常量，底层表示指针所指向的对象是个常量。</p>
-<h2 id="拷贝与顶层和底层-const"><a href="#拷贝与顶层和底层-const" class="headerlink" title="拷贝与顶层和底层 const"></a>拷贝与顶层和底层 const</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int *const p1 = &amp;i;     //  不能改变 p1 的值，这是一个顶层</span><br><span class="line">const int ci = 42;      //  不能改变 ci 的值，这是一个顶层</span><br><span class="line">const int *p2 = &amp;ci;    //  允许改变 p2 的值，这是一个底层</span><br><span class="line">const int *const p3 = p2;   //  靠右的 const 是顶层 const，靠左的是底层 const</span><br><span class="line">const int &amp;r = ci;      //  所有的引用本身都是顶层 const，因为引用一旦初始化就不能再改为其他对象的引用，这里用于声明引用的 const 都是底层 const</span><br></pre></td></tr></table></figure>
-
-<p>相关问题：</p>
-<p>为什么不能在一个常量对象中调用非常成员函数？</p>
-<p>因为在默认情况下，this的类型是指向类的非常量版本的常量指针（意思是this的值不能改变，永远指向那个对象，即“常量指针”，但是被this指向的对象本身是可以改变的，因为是非常量版本，这里this相当于是顶层const），而this尽管是隐式的，它仍然需要遵循初始化规则，普通成员函数的隐式参数之一是一个底层非const指针，在默认情况下我们无法把一个底层const的this指针转化为非const的this指针，因此我们不能在常量对象上调用普通的成员函数。因此在上例中，形参列表后的const就意味着默认this指针应该是一个底层const, 类型是 const ClassName&amp;。而非常对象却可以调用常成员函数，因为底层非const可以默认转化为底层const。</p>
-]]></content>
-      <categories>
-        <category>每日C++</category>
-      </categories>
-      <tags>
-        <tag>C++语法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>override和final说明符</title>
     <url>/2023/09/07/override%E5%92%8Cfinal%E8%AF%B4%E6%98%8E%E7%AC%A6/</url>
     <content><![CDATA[<h2 id="分清重写，重载和隐藏"><a href="#分清重写，重载和隐藏" class="headerlink" title="分清重写，重载和隐藏"></a>分清重写，重载和隐藏</h2><ul>
@@ -343,6 +326,38 @@
       </categories>
       <tags>
         <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>顶层Const和底层Const</title>
+    <url>/2023/09/04/%E9%A1%B6%E5%B1%82Const%E5%92%8C%E5%BA%95%E5%B1%82Const/</url>
+    <content><![CDATA[<h2 id="顶层-const-和底层-const"><a href="#顶层-const-和底层-const" class="headerlink" title="顶层 const 和底层 const"></a>顶层 const 和底层 const</h2><p>从 const 指针开始说起。const int* pInt; 和 int *const pInt &#x3D; &amp;someInt;，前者是 *pInt 不能改变，而后者是 pInt 不能改变。因此指针本身是不是常量和指针所指向的对象是不是常量就是两个互相独立的问题。用顶层表示指针本身是个常量，底层表示指针所指向的对象是个常量。</p>
+<h2 id="拷贝与顶层和底层-const"><a href="#拷贝与顶层和底层-const" class="headerlink" title="拷贝与顶层和底层 const"></a>拷贝与顶层和底层 const</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int *const p1 = &amp;i;     //  不能改变 p1 的值，这是一个顶层</span><br><span class="line">const int ci = 42;      //  不能改变 ci 的值，这是一个顶层</span><br><span class="line">const int *p2 = &amp;ci;    //  允许改变 p2 的值，这是一个底层</span><br><span class="line">const int *const p3 = p2;   //  靠右的 const 是顶层 const，靠左的是底层 const</span><br><span class="line">const int &amp;r = ci;      //  所有的引用本身都是顶层 const，因为引用一旦初始化就不能再改为其他对象的引用，这里用于声明引用的 const 都是底层 const</span><br></pre></td></tr></table></figure>
+
+<p>相关问题：</p>
+<p>为什么不能在一个常量对象中调用非常成员函数？</p>
+<p>因为在默认情况下，this的类型是指向类的非常量版本的常量指针（意思是this的值不能改变，永远指向那个对象，即“常量指针”，但是被this指向的对象本身是可以改变的，因为是非常量版本，这里this相当于是顶层const），而this尽管是隐式的，它仍然需要遵循初始化规则，普通成员函数的隐式参数之一是一个底层非const指针，在默认情况下我们无法把一个底层const的this指针转化为非const的this指针，因此我们不能在常量对象上调用普通的成员函数。因此在上例中，形参列表后的const就意味着默认this指针应该是一个底层const, 类型是 const ClassName&amp;。而非常对象却可以调用常成员函数，因为底层非const可以默认转化为底层const。</p>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>编译低版本插件</title>
+    <url>/2024/10/12/%E7%BC%96%E8%AF%91%E4%BD%8E%E7%89%88%E6%9C%AC%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>对于有些低版本的插件，可以通过此方法自己编译到高版本而无需等待插件作者更新</p>
+<p>使用工具：如图所示<br><img src="/pic/2024-10-12-13205.png" alt="img"></p>
+<p>步骤1：打开cmd，并使用cd命令切换到此目录<br>步骤2：输入如下指令 RunUAT.bat BuildPlugin -Plugin&#x3D;“路径1” -Package&#x3D;“路径2”，路径1是要编译的uplugin文件路径，路径2是生成文件的存放路径必须在UE目录外<br>步骤3：回车等待编译完成，编译成功会显示 BUILD SUCCESSFUL 如下图，失败会显示相应的报错，如果编译成功编译好的插件就会在路径2下<br>注意：如果跨的版本太多很大可能会编译失败，因为插件代码中所用的类和接口可能在当前版本被废弃或发生了改变，此时需要根据报错修改相应代码<br><img src="/pic/2024-10-12-13206.png" alt="img"><br><img src="/pic/2024-10-12-13207.png" alt="img"></p>
+<p>————————————————<br>原文链接：<a href="https://blog.csdn.net/qq_45523399/article/details/138391840">https://blog.csdn.net/qq_45523399/article/details/138391840</a></p>
+]]></content>
+      <categories>
+        <category>虚幻引擎</category>
+      </categories>
+      <tags>
+        <tag>Unreal学习</tag>
       </tags>
   </entry>
 </search>

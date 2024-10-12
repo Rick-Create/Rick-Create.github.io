@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="基本概念左值：在内存中有可以访问的地址，对象是一个左值。 右值：不可以取地址，整数10是个右值。 引用：对象的别名，没有创建新的对象，仅仅给已经存在的对象赋予了一个新的名字。  引用是对象的别名，对于引用的一切操作都是对对象的操作； 引用自身从概念上没有大小（或者就是对象的大小）；但引用在传递或需要存储时，其传递或存储的大小为地址的大小。 引用必须初始化； 引用不可能重新绑定； 将指针所指向的对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="左值与右值">
+<meta property="og:url" content="http://example.com/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/index.html">
+<meta property="og:site_name" content="每日三顿">
+<meta property="og:description" content="基本概念左值：在内存中有可以访问的地址，对象是一个左值。 右值：不可以取地址，整数10是个右值。 引用：对象的别名，没有创建新的对象，仅仅给已经存在的对象赋予了一个新的名字。  引用是对象的别名，对于引用的一切操作都是对对象的操作； 引用自身从概念上没有大小（或者就是对象的大小）；但引用在传递或需要存储时，其传递或存储的大小为地址的大小。 引用必须初始化； 引用不可能重新绑定； 将指针所指向的对象">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-04T12:43:49.000Z">
+<meta property="article:modified_time" content="2024-10-12T01:20:52.997Z">
+<meta property="article:author" content="Rick">
+<meta property="article:tag" content="C++语法">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/","path":"2023/09/04/左值与右值/","title":"左值与右值"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>左值与右值 | 每日三顿</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每日三顿</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E7%A7%8D%E7%B1%BB%E5%9E%8B%E5%BC%95%E7%94%A8%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">四种类型引用：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#move%E8%AF%AD%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">move语义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9F%E4%BA%A1%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">速亡值</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:mrcsd@foxmail.com" title="E-Mail → mailto:mrcsd@foxmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rick">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每日三顿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="左值与右值 | 每日三顿">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          左值与右值
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-04 20:43:49" itemprop="dateCreated datePublished" datetime="2023-09-04T20:43:49+08:00">2023-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-12 09:20:52" itemprop="dateModified" datetime="2024-10-12T09:20:52+08:00">2024-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%AF%8F%E6%97%A5C/" itemprop="url" rel="index"><span itemprop="name">每日C++</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>左值：在内存中有可以访问的地址，对象是一个左值。</p>
+<p>右值：不可以取地址，整数10是个右值。</p>
+<p>引用：对象的别名，没有创建新的对象，仅仅给已经存在的对象赋予了一个新的名字。</p>
+<ol>
+<li>引用是对象的别名，对于引用的一切操作都是对对象的操作；</li>
+<li>引用自身从概念上没有大小（或者就是对象的大小）；但引用在传递或需要存储时，其传递或存储的大小为地址的大小。</li>
+<li>引用必须初始化；</li>
+<li>引用不可能重新绑定；</li>
+<li>将指针所指向的对象绑定到一个引用时，需要确保指针非空。</li>
+<li>任何引用类型的变量，都是左值。</li>
+</ol>
+<h3 id="四种类型引用："><a href="#四种类型引用：" class="headerlink" title="四种类型引用："></a>四种类型引用：</h3><p>|:—-|—-:|:—-:|<br>|类型|例子|备注|<br>|const lvalue refrence|Foo foo(10); const Foo&amp; ref &#x3D; foo;| |	<br>|const rvalue refrence|const Foo&amp; ref &#x3D; Foo(10);| |<br>|non-const lvalue refrence|Foo foo(10); Foo&amp; ref &#x3D; foo;| |	<br>|non-const rvalue refrence|Foo&amp;&amp; ref&#x3D;Foo(10);|C++11才开始有|</p>
+<h3 id="move语义"><a href="#move语义" class="headerlink" title="move语义"></a>move语义</h3><p>C++11 之前，只有 copy 语意，这对于极度关注性能的语言而言是一个重大的缺失。</p>
+<p>对move 语意的急迫需求，到了 C++11 终于被引入。其直接的驱动力很简单：在构造或者赋值时，如果等号右侧是一个中间临时对象，应直接将其占用的资源直接 move 过来（对方就没有了）。</p>
+<p>但问题是，如何让一个构造函数，或者赋值操作重载函数能够识别出来这是一个临时变量？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/////////////hello.cpp/////////////////</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">struct Foo</span><br><span class="line">&#123;</span><br><span class="line">	Foo()&#123; cout &lt;&lt; &quot;Foo()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">	Foo(const Foo&amp;ref)&#123; cout &lt;&lt; &quot;Foo(const Foo&amp;)&quot; &lt;&lt; endl; &#125; // copy ctor</span><br><span class="line">	Foo(Foo&amp;&amp; ref)&#123; cout &lt;&lt; &quot;Foo(Foo&amp;&amp;)&quot; &lt;&lt; endl; &#125;          // move ctor</span><br><span class="line">	Foo&amp; operator=(const Foo&amp; rhs)&#123;cout &lt;&lt; &quot;Foo&amp; operator=(const Foo&amp; rhs)&quot; &lt;&lt; endl; &#125; // copy assignment</span><br><span class="line">	Foo&amp; operator=(Foo&amp;&amp; rhs)&#123;cout &lt;&lt; &quot;Foo&amp; operator=(Foo&amp;&amp; rhs)&quot; &lt;&lt; endl; &#125;           // move assignment </span><br><span class="line">	~Foo()&#123; cout &lt;&lt; &quot;~Foo()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	Foo foo1 = Foo();</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	foo1 = Foo();</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	Foo  foo2 = foo1;</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	foo2 = foo1;</span><br><span class="line">        getchar();</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实参类型为non-const lvalue reference、const lvalue reference、 const rvalue reference可以匹配到copy ctor和copy assignment。</p>
+<p>实参类型为non-const rvalue reference 才能匹配到 move ctor和 move assignment 。</p>
+<p>通过这样的方式，让 Foo foo1 &#x3D; Foo()或 foo1 &#x3D; Foo()这样的表达式，都可以匹配到 move 语意的版本。</p>
+<p>与此同时，让 Foo foo2 &#x3D; foo1 或 foo2 &#x3D; foo1 这样的表达式，依然使用 copy 语意的版本。</p>
+<p>达到以上效果需要编译时加上-fno-elide-constructors，以此关闭编译器省略创建一个只是为了初始化另一个同类型对象的临时对象的优化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">struct Foo</span><br><span class="line">&#123;</span><br><span class="line">	Foo(int a) :a(a)&#123;&#125;</span><br><span class="line">	int a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void test1(Foo&amp;&amp; f)</span><br><span class="line">&#123;</span><br><span class="line">// 对于任何类型为 右值引用的变量（当然也包括函数参数），只能由右值来初始化；</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test2(Foo&amp; f)</span><br><span class="line">&#123;</span><br><span class="line">//  一个右值，不能被 T&amp; 类型的参数匹配；毕竟这种可以修改的承诺。而修改一个调用后即消失的临时</span><br><span class="line">//  对象上，没有任何意义，反而会导致程序员犯下潜在的错误，因而还是禁止了最好</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test3(const Foo&amp; f)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;	</span><br><span class="line"></span><br><span class="line">Foo f1(1);</span><br><span class="line">test1(f1);  // wrong  cannot bind ‘Foo’ lvalue to ‘Foo&amp;&amp;’ 不能将一个左值绑定到右值引用</span><br><span class="line">test2(f1);  // ok</span><br><span class="line">test3(f1);  // ok</span><br><span class="line"></span><br><span class="line">test1(Foo&#123;1&#125;);  // ok      Foo&#123;1&#125;是右值</span><br><span class="line">test2(Foo&#123;1&#125;);  // wrong   这种做法无意义,invalid initialization of non-const reference of type ‘Foo&amp;’ from an rvalue of type ‘Foo’</span><br><span class="line">test3(Foo&#123; 1 &#125;);  // ok</span><br><span class="line"></span><br><span class="line">// ref是左值虽然其类型是右值引用; </span><br><span class="line">// 一个类型为 右值引用的变量，一旦被初始化之后，临时对象的生命将被扩展，会在其被创建的 scope 内始终有效。</span><br><span class="line">// 看似 ref 被定义的类型为 右值引用，但这仅仅约束它的初始化：只能从一个 右值进行初始化。</span><br><span class="line">// 但一旦初始化完成，它就和一个 左值引用再也没有任何差别：都是一个已存在对象的 标识。</span><br><span class="line">Foo&amp;&amp; ref = Foo&#123;1&#125;; </span><br><span class="line">test1(ref);    // wrong  ref是左值,test1的形参为右值引用,右值引用的变量只能由右值来初始化 cannot bind ‘Foo’ lvalue to ‘Foo&amp;&amp;’</span><br><span class="line">test2(ref); // ok  </span><br><span class="line">test3(ref); // ok</span><br></pre></td></tr></table></figure>
+
+<h2 id="速亡值"><a href="#速亡值" class="headerlink" title="速亡值"></a>速亡值</h2><p>只有右值临时对象可以初始化右值引用变量，从而也只有右值临时变量能够匹配参数类型为 右值引用（T&amp;&amp;）的函数，包括 move 构造函数。</p>
+<p>如果程序员就是想把一个左值 move 给另外一个对象，该怎么办？最简单的选择是通过 static_cast 进行类型转换：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Foo foo&#123;10&#125;;           // foo为左值</span><br><span class="line">Foo&amp;&amp; ref = Foo&#123;10&#125;;   // ref为左值  类型为右值引用</span><br><span class="line">Foo obj1 = static_cast&lt;Foo&amp;&amp;&gt;(foo); // move 构 造</span><br><span class="line">Foo obj2 = static_cast&lt;Foo&amp;&amp;&gt;(ref); // move 构 造</span><br></pre></td></tr></table></figure>
+
+<p>我们之前说过，只有 右值，才可以用来初始化一个 右值引用类型的变量，因而也只有 右值才能匹配 move构造。</p>
+<p>所以，static_cast&lt;Foo&amp;&amp;&gt;(foo) 表达式，肯定是一个 右值。</p>
+<p>但同时，它返回的类型又非常明确的是一个 引用，而这一点又不符合 右值的定义。</p>
+<p>因为，所有的右值，都必须是一个 具体类型，不能是不完备类型，也不能是抽象类型，但 引用，无论左值引用，还是右值引用，都可以是不完备类型的引用或抽象类型的引用。这是 左值才有的特征。</p>
+<p>对于这种既有左值特征，又和右值临时对象一样，可以用来初始化右值引用类型的变量的表达式，只能将其归为新的类别。C++11 给这个新类别命名为 速亡值 (eXpiring value，简称 xvalue)。</p>
+<p>而将原来的 右值，重新命名为 纯右值。而 速亡值和 纯右值合在一起，称为 右值，其代表的含义是，所有可以直接用来初始化 右值引用类型变量的表达式。</p>
+<p>同时，由于 速亡值又具备左值特征：可以是不完备类型，可以是抽象类型，可以进行运行时多态。所以，速亡值又和 左值一起被归类为 泛左值（generalized lvalue, 简称 glvalue)。</p>
+<p>From</p>
+<blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/595114215">https://zhuanlan.zhihu.com/p/595114215</a></p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-%E8%AF%AD%E6%B3%95/" rel="tag"># C++语法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/04/Extent%E5%85%B3%E9%94%AE%E5%AD%97/" rel="prev" title="Extent关键字">
+                  <i class="fa fa-chevron-left"></i> Extent关键字
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/04/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="next" title="lambda表达式">
+                  lambda表达式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Rick</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

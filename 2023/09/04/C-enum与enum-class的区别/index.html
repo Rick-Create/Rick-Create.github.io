@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="C++11新特性：enum与enum class的区别enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。 文件目录 防止污染空间 可以前置声明 需要强制转换  防止污染空间12345678910enum MyEnum&amp;#123;    ME_FIRST,    ME_SECOND&amp;#125;enum MyEnum2&amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ enum与enum class的区别">
+<meta property="og:url" content="http://example.com/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
+<meta property="og:site_name" content="每日三顿">
+<meta property="og:description" content="C++11新特性：enum与enum class的区别enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。 文件目录 防止污染空间 可以前置声明 需要强制转换  防止污染空间12345678910enum MyEnum&amp;#123;    ME_FIRST,    ME_SECOND&amp;#125;enum MyEnum2&amp;#1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-04T02:40:33.000Z">
+<meta property="article:modified_time" content="2024-10-12T01:20:52.859Z">
+<meta property="article:author" content="Rick">
+<meta property="article:tag" content="C++语法">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/","path":"2023/09/04/C-enum与enum-class的区别/","title":"C++ enum与enum class的区别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++ enum与enum class的区别 | 每日三顿</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每日三顿</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9Aenum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">C++11新特性：enum与enum class的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">文件目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E6%B1%A1%E6%9F%93%E7%A9%BA%E9%97%B4"><span class="nav-number">2.1.</span> <span class="nav-text">防止污染空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E5%89%8D%E7%BD%AE%E5%A3%B0%E6%98%8E"><span class="nav-number">3.</span> <span class="nav-text">可以前置声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E5%BC%BA%E5%88%B6%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">需要强制转换</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Rick"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Rick</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:mrcsd@foxmail.com" title="E-Mail → mailto:mrcsd@foxmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Rick">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每日三顿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++ enum与enum class的区别 | 每日三顿">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ enum与enum class的区别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-04 10:40:33" itemprop="dateCreated datePublished" datetime="2023-09-04T10:40:33+08:00">2023-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-12 09:20:52" itemprop="dateModified" datetime="2024-10-12T09:20:52+08:00">2024-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%AF%8F%E6%97%A5C/" itemprop="url" rel="index"><span itemprop="name">每日C++</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="C-11新特性：enum与enum-class的区别"><a href="#C-11新特性：enum与enum-class的区别" class="headerlink" title="C++11新特性：enum与enum class的区别"></a>C++11新特性：enum与enum class的区别</h2><p>enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。</p>
+<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><ol>
+<li>防止污染空间</li>
+<li>可以前置声明</li>
+<li>需要强制转换</li>
+</ol>
+<h3 id="防止污染空间"><a href="#防止污染空间" class="headerlink" title="防止污染空间"></a>防止污染空间</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">enum MyEnum</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND</span><br><span class="line">&#125;</span><br><span class="line">enum MyEnum2</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST, ///错误 ,  不限定范围的enum不允许这么做</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>通常原先的enum的枚举 在同一作用下，重复声明是不允许这样做，但是enum class却可以这样做，因为作用域不一样了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">enum class MyEnum</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum class MyEnum2</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND /// 编译通过</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="可以前置声明"><a href="#可以前置声明" class="headerlink" title="可以前置声明"></a>可以前置声明</h2><p>这是enum class最大的优势。前置声明不知道各位熟不熟悉。前置声明最明显的优势是在多个头文件编译时，某个头文件发生变化，不需要重新编译。这个与 effective C++ 的第31条款的降低文件编译依赖性 有异曲同工之妙。</p>
+<h2 id="需要强制转换"><a href="#需要强制转换" class="headerlink" title="需要强制转换"></a>需要强制转换</h2><p>我认为enum class的缺点。原始的enum具有自动隐式转换的int，虽然这个在许多人眼里觉得这样做可以防止污染空间。但是在使用的时候感觉到非常的繁琐。例如，在作为参数的时候，尤其回调的时候，有时候为了方便，不想在另一个类里面包含有枚举的类，通常是以int做参数。但是这样就会有强转的情况。或者Qt 做界面的时候，数值通常会以int之类的传递，想要enum class 包含常用的数值。</p>
+<p>那这个时候就又要强转。effective C++ 第三十一条款 尽量少使用强制类型转换。不光是因为可能会破坏数据结构，而是效率低下，尤其 dynamic_cast 效率低下。但是有些状况下，必须强转。这时候推荐 C++ 新型的强制类型转换。在More effective C++ 提到的不仅标识度高，而且更加的安全。</p>
+<ul>
+<li>标准C++类型转换有四种：static_cast, dynamic_cast, reinterpret_cast , const_cast。<ul>
+<li>static_cast：用法：static_cast (expression)<ul>
+<li>该运算符将expression转换成type-id类型，但是该运算符没有进行运行时类型检查来保证转换的安全性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>dynamic_cast：用法：dynamic_cast (expression)<ul>
+<li>该运算符将expression转换成type-id类型，其中type-id必须是类的指针、引用或者void *。type-id和expression需要是同一种表示方式（引用对引用，指针对指针）。该运算符主要用于类层次之间的上行和下行转换，或者类之间的交叉转换。类层次间的上下行转换效果和static_cast一样，但是下行转换时，dynamic_cast具有类型检查功能，比static_cast更安全。</li>
+</ul>
+</li>
+<li>reinterpret_cast：用法：reinterpret_cast (expression)<ul>
+<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。</li>
+</ul>
+</li>
+<li>const**_cast**：用法：const_cast (expression)<ul>
+<li>该运算符用来修改类型的const或volatile属性，除了const或volatile修饰外，type-id和expression类型是一样的。如常量指针变成非常量指针，且仍指向原来对象。<br>————————————————</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43331089/article/details/121655801">https://blog.csdn.net/qq_43331089/article/details/121655801</a></p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-%E8%AF%AD%E6%B3%95/" rel="tag"># C++语法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/10/first-class/" rel="prev" title="first class">
+                  <i class="fa fa-chevron-left"></i> first class
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/04/%E9%A1%B6%E5%B1%82Const%E5%92%8C%E5%BA%95%E5%B1%82Const/" rel="next" title="顶层Const和底层Const">
+                  顶层Const和底层Const <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Rick</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

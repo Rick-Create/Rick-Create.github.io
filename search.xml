@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Extent关键字</title>
+    <url>/2023/09/04/Extent%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <content><![CDATA[<h2 id="C-中extern关键字用法小结"><a href="#C-中extern关键字用法小结" class="headerlink" title="C++中extern关键字用法小结"></a>C++中extern关键字用法小结</h2><p>总结C++中关于extern关键字的用法。</p>
+<p>1.变量的生明和定义中<br>C++语言支持分离式编译机制，该机制允许将程序分割为若干个文件，每个文件可被独立编译。为了将程序分为许多文件，则需要在文件中共享代码，例如一个文件的代码可能需要另一个文件中中定义的变量。</p>
+<p>为了支持分离式编译，C++允许将声明和定义分离开来。变量的声明规定了变量的类型和名字，即使一个名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明。定义则负责创建与名字关联的实体，定义还申请存储空间。</p>
+<p>如果想声明一个变量而非定义它，就在变量名前添加extern关键字，而且不要显式地初始化变量：</p>
+<p>extern int i;  &#x2F;&#x2F;声明i而非定义<br>int j;         &#x2F;&#x2F;声明并定义i<br>但我们也可以给由extern关键字标记的变量赋一个初始值，但这样就不是一个声明了，而是一个定义：</p>
+<p>extern int v &#x3D; 2;<br>int v &#x3D; 2;     &#x2F;&#x2F;这两个语句效果完全一样，都是v的定义<br>注意： 变量能且只能被定义一次，但是可以被声明多次。</p>
+<p>2.在多个文件中共享const对象<br>默认情况下，一个const对象仅在本文件内有效，如果多个文件中出现了同名的const变量时，其实等同于在不同的文件中分别定义了独立的变量。</p>
+<p>某些时候有这样一种const变量，它的初始值不是一个常量表达式，但又确实有必要在文件间共享。这种情况下，我们不希望编译器为每个文件分别生成独立的变量。我们想让这类const对象像其他非常量对象一样工作，也就是说，只在一个文件中定义const，而在其他多个文件中声明并使用它。</p>
+<p>方法是对于const变量不管是声明还是定义都添加extern关键字，这样只需要定义一次就可以了：</p>
+<p>&#x2F;&#x2F;file1.cpp定义并初始化和一个常量，该常量能被其他文件访问<br>extern const int bufferSize &#x3D; function();<br>&#x2F;&#x2F;file1.h头文件<br>extern const int bufferSize; &#x2F;&#x2F;与file1.cpp中定义的是同一个<br>file1.h头文件中的声明也由extern做了限定，其作用是指明bufferSize并非本文件独有，它的定义将出现在别处。</p>
+<p>3.模板的控制实例化<br>当两个或者多个独立编译的源文件中使用了相同的模板并且提供了相同的模板参数时，每个文件中都会有该模板的一个实例。</p>
+<p>在大系统中，在多个文件中实例化相同的模板的额外开销可能非常严重，在C++11新标准中，我们可以通过显式实例化来避免这种开销。一个显式实例化具有如下形式：</p>
+<p>extern template declaration; &#x2F;&#x2F;实例化声明<br>template declaration;        &#x2F;&#x2F;实例化定义<br>declaration是一个类或函数的声明，其中所有的模板参数都已经被替换成为模板实参。例如：</p>
+<p>extern template class vec<string>;       &#x2F;&#x2F;声明<br>template int sum(const int, const int);  &#x2F;&#x2F;定义<br>当编译器遇到extern模板声明时，它不会在本文件中生成实例化代码，将一个实例化声明为extern就表示承诺在程序的其他位置有该实例化的一个非extern定义。对于一个给定的实例化版本，可能有多个extern声明，但必须只有一个定义。</p>
+<p>由于编译器在使用一个模板时自动对其实例化，因此extern声明必须出现在任何使用此实例化吧版本的代码之前。</p>
+<p>由于以上讨论可知：extern一般是使用在多文件之间需要共享某些代码时</p>
+<blockquote>
+<blockquote>
+<p><a href="https://www.cnblogs.com/broglie/p/5524932.html">https://www.cnblogs.com/broglie/p/5524932.html</a></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ enum与enum class的区别</title>
+    <url>/2023/09/04/C-enum%E4%B8%8Eenum-class%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="C-11新特性：enum与enum-class的区别"><a href="#C-11新特性：enum与enum-class的区别" class="headerlink" title="C++11新特性：enum与enum class的区别"></a>C++11新特性：enum与enum class的区别</h2><p>enum class是C++11之后出来的新特性，enum在这之后称为不限定范围的枚举，enum class称为限定范围的枚举。</p>
+<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><ol>
+<li>防止污染空间</li>
+<li>可以前置声明</li>
+<li>需要强制转换</li>
+</ol>
+<h3 id="防止污染空间"><a href="#防止污染空间" class="headerlink" title="防止污染空间"></a>防止污染空间</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">enum MyEnum</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND</span><br><span class="line">&#125;</span><br><span class="line">enum MyEnum2</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST, ///错误 ,  不限定范围的enum不允许这么做</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>通常原先的enum的枚举 在同一作用下，重复声明是不允许这样做，但是enum class却可以这样做，因为作用域不一样了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">enum class MyEnum</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum class MyEnum2</span><br><span class="line">&#123;</span><br><span class="line">    ME_FIRST,</span><br><span class="line">    ME_SECOND /// 编译通过</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="可以前置声明"><a href="#可以前置声明" class="headerlink" title="可以前置声明"></a>可以前置声明</h2><p>这是enum class最大的优势。前置声明不知道各位熟不熟悉。前置声明最明显的优势是在多个头文件编译时，某个头文件发生变化，不需要重新编译。这个与 effective C++ 的第31条款的降低文件编译依赖性 有异曲同工之妙。</p>
+<h2 id="需要强制转换"><a href="#需要强制转换" class="headerlink" title="需要强制转换"></a>需要强制转换</h2><p>我认为enum class的缺点。原始的enum具有自动隐式转换的int，虽然这个在许多人眼里觉得这样做可以防止污染空间。但是在使用的时候感觉到非常的繁琐。例如，在作为参数的时候，尤其回调的时候，有时候为了方便，不想在另一个类里面包含有枚举的类，通常是以int做参数。但是这样就会有强转的情况。或者Qt 做界面的时候，数值通常会以int之类的传递，想要enum class 包含常用的数值。</p>
+<p>那这个时候就又要强转。effective C++ 第三十一条款 尽量少使用强制类型转换。不光是因为可能会破坏数据结构，而是效率低下，尤其 dynamic_cast 效率低下。但是有些状况下，必须强转。这时候推荐 C++ 新型的强制类型转换。在More effective C++ 提到的不仅标识度高，而且更加的安全。</p>
+<ul>
+<li>标准C++类型转换有四种：static_cast, dynamic_cast, reinterpret_cast , const_cast。<ul>
+<li>static_cast：用法：static_cast (expression)<ul>
+<li>该运算符将expression转换成type-id类型，但是该运算符没有进行运行时类型检查来保证转换的安全性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>dynamic_cast：用法：dynamic_cast (expression)<ul>
+<li>该运算符将expression转换成type-id类型，其中type-id必须是类的指针、引用或者void *。type-id和expression需要是同一种表示方式（引用对引用，指针对指针）。该运算符主要用于类层次之间的上行和下行转换，或者类之间的交叉转换。类层次间的上下行转换效果和static_cast一样，但是下行转换时，dynamic_cast具有类型检查功能，比static_cast更安全。</li>
+</ul>
+</li>
+<li>reinterpret_cast：用法：reinterpret_cast (expression)<ul>
+<li>type-id必须是一个指针、引用、算术类型、函数指针或成员指针，可以进行指针和整数之间的相互转换，缺点：平台移植性比较差。</li>
+</ul>
+</li>
+<li>const**_cast**：用法：const_cast (expression)<ul>
+<li>该运算符用来修改类型的const或volatile属性，除了const或volatile修饰外，type-id和expression类型是一样的。如常量指针变成非常量指针，且仍指向原来对象。<br>————————————————</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>原文链接：<a href="https://blog.csdn.net/qq_43331089/article/details/121655801">https://blog.csdn.net/qq_43331089/article/details/121655801</a></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>lambda表达式</title>
+    <url>/2023/09/04/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="C-Lambda表达式的完整介绍"><a href="#C-Lambda表达式的完整介绍" class="headerlink" title="C++ Lambda表达式的完整介绍"></a>C++ Lambda表达式的完整介绍</h2><p>c++在c++11标准中引入了lambda表达式，一般用于定义匿名函数，使得代码更加灵活简洁。lambda表达式与普通函数类似，也有参数列表、返回值类型和函数体，只是它的定义方式更简洁，并且可以在函数内部定义。</p>
+<h3 id="什么是Lambda表达式"><a href="#什么是Lambda表达式" class="headerlink" title="什么是Lambda表达式"></a>什么是Lambda表达式</h3><p>最常见的lambda的表达式写法如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int v1, int v2) -&gt; int &#123; return v1 + v2; &#125;</span><br><span class="line">int sum = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>这里只是计算两个数的和，我们一般情况下肯定是不会这么用的，更多的时候，我们都是和stl的一些算法结合使用，例如自定义一个结构体的排序规则和打印。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">struct Item</span><br><span class="line">&#123;</span><br><span class="line">    Item(int aa, int bb) : a(aa), b(bb) &#123;&#125; </span><br><span class="line">    int a;</span><br><span class="line">    int b;</span><br><span class="line">&#125;;</span><br><span class="line">	</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    std::vector&lt;Item&gt; vec;</span><br><span class="line">    vec.push_back(Item(1, 19));</span><br><span class="line">    vec.push_back(Item(10, 3));</span><br><span class="line">    vec.push_back(Item(3, 7));</span><br><span class="line">    vec.push_back(Item(8, 12));</span><br><span class="line">    vec.push_back(Item(2, 1));</span><br><span class="line"></span><br><span class="line">    // 根据Item中成员a升序排序</span><br><span class="line">    std::sort(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; v1, const Item&amp; v2) &#123; return v1.a &lt; v2.a; &#125;);</span><br><span class="line"></span><br><span class="line">    // 打印vec中的item成员</span><br><span class="line">    std::for_each(vec.begin(), vec.end(),</span><br><span class="line">        [] (const Item&amp; item) &#123; std::cout &lt;&lt; item.a &lt;&lt; &quot; &quot; &lt;&lt; item.b &lt;&lt; std::endl; &#125;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的写法让我们代码更加简洁、清晰，可读性更强。</p>
+<ol>
+<li>[captures] <tparams> <em><strong>(optional C++20)</strong></em>(params) lambda-specifiers{body}</li>
+<li>[captures] (params) trailing-return-type{body}</li>
+<li>[captures] (params) {body}</li>
+<li>[captures] lambda-specifiers <em><strong>(optional C++20)</strong></em>{body}</li>
+</ol>
+<p>下面介绍一下lambda的四种表达式的含义，以及表达式中各个成分的，其实说白就是在自己理解的基础上翻译一下官方文档。</p>
+<p>###四种表达式的含义<br>（1）完整的lambda表达式，包含了lambda表达式的所有成分。</p>
+<p>（2）常量lambda表达式，捕获的变量都是常量，不能在lambda表达式的body中进行修改。</p>
+<p>（3）和（2）基本一致，唯一的区别就是，lambda表达式的函数返回值可以通过函数体推导出来。一般情况函数返回值类型明确或者没有返回值的情况下可以这样写。</p>
+<p>（4）lambda表达式的函数没有任何参数，但是可以添加lambda-specifiers，lambda-specifiers是什么我们后续再介绍。</p>
+<h3 id="lambda表达式各个成员的解释"><a href="#lambda表达式各个成员的解释" class="headerlink" title="lambda表达式各个成员的解释"></a>lambda表达式各个成员的解释</h3><p><strong>captures 捕获列表</strong>，lambda可以把上下文变量以值或引用的方式捕获，在body中直接使用。</p>
+<p><strong>tparams 模板参数列表</strong>(c++20引入)，让lambda可以像模板函数一样被调用。</p>
+<p><strong>params 参数列表</strong>，有一点需要注意，在c++14之后允许使用auto左右参数类型。</p>
+<p><strong>lambda-specifiers lambda说明符</strong>， 一些可选的参数，这里不多介绍了，有兴趣的读者可以去官方文档上看。这里比较常用的参数就是mutable和exception。其中，表达式(1)中没有trailing-return-type，是因为包含在这一项里面的。</p>
+<p><strong>trailing-return-type</strong> 返回值类型，一般可以省略掉，由编译器来推导。</p>
+<p><strong>body 函数体</strong>，函数的具体逻辑。</p>
+<h3 id="捕获列表"><a href="#捕获列表" class="headerlink" title="捕获列表"></a>捕获列表</h3><p>上面介绍完了lambda表达式的各个成分，其实很多部分和正常的函数没什么区别，其中最大的一个不同点就是捕获列表。我在刚开始用lambda表达式的时候，还一直以为这个没啥用，只是用一个 [] 来标志着这是一个lambda表达式。后来了解了才知道，原来这个捕获列表如此强大，甚至我觉得捕获列表就是lambda表达式的灵魂。下面先介绍几种常用的捕获方式。</p>
+<p><strong>[]</strong> 什么也不捕获，无法lambda函数体使用任何</p>
+<p><strong>[&#x3D;]</strong> 按值的方式捕获所有变量</p>
+<p><strong>[&amp;]</strong> 按引用的方式捕获所有变量</p>
+<p><strong>[&#x3D;, &amp;a]</strong> 除了变量a之外，按值的方式捕获所有局部变量，变量a使用引用的方式来捕获。这里可以按引用捕获多个，例如 [&#x3D;, &amp;a, &amp;b,&amp;c]。这里注意，如果前面加了&#x3D;，后面加的具体的参数必须以引用的方式来捕获，否则会报错。</p>
+<p><strong>[&amp;, a]</strong> 除了变量a之外，按引用的方式捕获所有局部变量，变量a使用值的方式来捕获。这里后面的参数也可以多个，例如 [&amp;, a, b, c]。这里注意，如果前面加了&amp;，后面加的具体的参数必须以值的方式来捕获。</p>
+<p><strong>[a, &amp;b]</strong> 以值的方式捕获a，引用的方式捕获b，也可以捕获多个。</p>
+<p><strong>[this]</strong> 在成员函数中，也可以直接捕获this指针，其实在成员函数中，[&#x3D;]和[&amp;]也会捕获this指针。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 3;</span><br><span class="line">    int b = 5;</span><br><span class="line">    </span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func1 = [a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func1();</span><br><span class="line"></span><br><span class="line">    // 按值来捕获</span><br><span class="line">    auto func2 = [=] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func2();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func3 = [&amp;a] &#123; std::cout &lt;&lt; a &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func3();</span><br><span class="line"></span><br><span class="line">    // 按引用来捕获</span><br><span class="line">    auto func4 = [&amp;] &#123; std::cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b &lt;&lt; std::endl; &#125;;</span><br><span class="line">    func4();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编译器如何看待Lambda表达式"><a href="#编译器如何看待Lambda表达式" class="headerlink" title="编译器如何看待Lambda表达式"></a>编译器如何看待Lambda表达式</h3><p>我们把lambda表达式看成一个函数，那编译器怎么看待我们协的lambda呢？</p>
+<p>其实，编译器会把我们写的lambda表达式翻译成一个类，并重载 operator()来实现。比如我们写一个lambda表达式为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto plus = [] (int a, int b) -&gt; int &#123; return a + b; &#125;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>那么编译器会把我们写的表达式翻译为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">LambdaClass plus;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>调用的时候编译器会生成一个Lambda的对象，并调用opeartor ()函数。<strong>（备注：这里的编译的翻译结果并不和真正的结果完全一致，只是把最主要的部分体现出来，其他的像类到函数指针的转换函数均省略）</strong></p>
+<p>上面是一种调用方式，那么如果我们写一个复杂一点的lambda表达式，表达式中的成分会如何与类的成分对应呢？我们再看一个 值捕获 例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) -&gt; int &#123; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+
+<p>编译器的翻译结果为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int xx, int yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b) const</span><br><span class="line">    &#123;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int x;</span><br><span class="line">    int y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int x = 1; int y = 2;</span><br><span class="line">LambdaClass plus(x, y);</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+
+<p>其实这里就可以看出，值捕获时，编译器会把捕获到的值作为类的成员变量，并且变量是以值的方式传递的。需要注意的时，如果所有的参数都是值捕获的方式，那么生成的operator()函数是const函数的，是无法修改捕获的值的，哪怕这个修改不会改变lambda表达式外部的变量，如果想要在函数内修改捕获的值，需要加上关键字 mutable。向下面这样的形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [=] (int a, int b) mutable -&gt; int &#123; x++; return x + y + a + b; &#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>我们再来看一个引用捕获的例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int x = 1; int y = 2;</span><br><span class="line">auto plus = [&amp;] (int a, int b) -&gt; int &#123; x++; return x + y + a + b;&#125;;</span><br><span class="line">int c = plus(1, 2);</span><br></pre></td></tr></table></figure>
+<p>编译器的翻译结果为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class LambdaClass</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    LambdaClass(int&amp; xx, int&amp; yy)</span><br><span class="line">    : x(xx), y(yy) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    int operator () (int a, int b)</span><br><span class="line">    &#123;</span><br><span class="line">        x++;</span><br><span class="line">        return x + y + a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    int &amp;x;</span><br><span class="line">    int &amp;y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到以引用的方式捕获变量，和值捕获的方式有3个不同的地方：1. 参数引用的方式进行传递; 2. 引用捕获在函数体修改变量，会直接修改lambda表达式外部的变量；3. opeartor()函数不是const的。</p>
+<p>针对上面的集中情况，我们把lambda的各个成分和类的各个成分对应起来就是如下的关系:</p>
+<p><strong>捕获列表</strong>，对应LambdaClass类的<strong>private成员</strong>。</p>
+<p><strong>参数列表</strong>，对应LambdaClass类的成员函数的operator()的形参列表</p>
+<p><strong>mutable</strong>，对应 LambdaClass类成员函数 <strong>operator() 的const属性 ，但是只有在捕获列表捕获的参数不含有引用捕获的情况下才会生效</strong>，因为捕获列表只要包含引用捕获，那operator()函数就一定是非const函数。</p>
+<p><strong>返回类型</strong>，对应 LambdaClass类成员函数 <strong>operator() 的返回类型</strong></p>
+<p><strong>函数体</strong>，对应 LambdaClass类成员函数 <strong>operator() 的函数体</strong>。</p>
+<p><strong>引用捕获和值捕获不同的一点就是，对应的成员是否为引用类型。</strong></p>
+<p>Copy From</p>
+<blockquote>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/384314474">https://zhuanlan.zhihu.com/p/384314474</a></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/10/12/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>first class</title>
+    <url>/2023/07/10/first-class/</url>
+    <content><![CDATA[<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="right">B</td>
+<td align="center">C</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td align="right">b</td>
+<td align="center">c</td>
+</tr>
+</tbody></table>
+<ul>
+<li>无序列表1</li>
+<li>无序列表2</li>
+</ul>
+<ol>
+<li>有序列表1</li>
+<li>有序列表2</li>
+</ol>
+<p><strong>加粗</strong></p>
+<p><em>斜体</em></p>
+<p><em><strong>粗体斜体</strong></em></p>
+<blockquote>
+<p>这是一个引用</p>
+<blockquote>
+<p>引用套嵌</p>
+</blockquote>
+</blockquote>
+<hr>
+<p><code>Hello world</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;cstring&gt;</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line"> </span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">class CMyString</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	CMyString(const char* pData = nullptr);</span><br><span class="line">	CMyString(const CMyString&amp; str);</span><br><span class="line">	~CMyString(void);</span><br><span class="line"> </span><br><span class="line">	CMyString&amp; operator = (const CMyString&amp; str);</span><br><span class="line"> </span><br><span class="line">	void Print();</span><br><span class="line"> </span><br><span class="line">private:</span><br><span class="line">	char* m_pData;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.baidu.com/">这是百度的链接</a></p>
+<p><img src="https://img2.baidu.com/it/u=3063029439,2036275027&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800" alt="这是一个图片"></p>
+<p><del>世界是平坦的。</del> 我们现在知道世界是圆的。</p>
+]]></content>
+      <categories>
+        <category>Markdown 语法</category>
+      </categories>
+      <tags>
+        <tag>第一篇</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>左值与右值</title>
+    <url>/2023/09/04/%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC/</url>
+    <content><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>左值：在内存中有可以访问的地址，对象是一个左值。</p>
+<p>右值：不可以取地址，整数10是个右值。</p>
+<p>引用：对象的别名，没有创建新的对象，仅仅给已经存在的对象赋予了一个新的名字。</p>
+<ol>
+<li>引用是对象的别名，对于引用的一切操作都是对对象的操作；</li>
+<li>引用自身从概念上没有大小（或者就是对象的大小）；但引用在传递或需要存储时，其传递或存储的大小为地址的大小。</li>
+<li>引用必须初始化；</li>
+<li>引用不可能重新绑定；</li>
+<li>将指针所指向的对象绑定到一个引用时，需要确保指针非空。</li>
+<li>任何引用类型的变量，都是左值。</li>
+</ol>
+<h3 id="四种类型引用："><a href="#四种类型引用：" class="headerlink" title="四种类型引用："></a>四种类型引用：</h3><p>|:—-|—-:|:—-:|<br>|类型|例子|备注|<br>|const lvalue refrence|Foo foo(10); const Foo&amp; ref &#x3D; foo;| |	<br>|const rvalue refrence|const Foo&amp; ref &#x3D; Foo(10);| |<br>|non-const lvalue refrence|Foo foo(10); Foo&amp; ref &#x3D; foo;| |	<br>|non-const rvalue refrence|Foo&amp;&amp; ref&#x3D;Foo(10);|C++11才开始有|</p>
+<h3 id="move语义"><a href="#move语义" class="headerlink" title="move语义"></a>move语义</h3><p>C++11 之前，只有 copy 语意，这对于极度关注性能的语言而言是一个重大的缺失。</p>
+<p>对move 语意的急迫需求，到了 C++11 终于被引入。其直接的驱动力很简单：在构造或者赋值时，如果等号右侧是一个中间临时对象，应直接将其占用的资源直接 move 过来（对方就没有了）。</p>
+<p>但问题是，如何让一个构造函数，或者赋值操作重载函数能够识别出来这是一个临时变量？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/////////////hello.cpp/////////////////</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">struct Foo</span><br><span class="line">&#123;</span><br><span class="line">	Foo()&#123; cout &lt;&lt; &quot;Foo()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">	Foo(const Foo&amp;ref)&#123; cout &lt;&lt; &quot;Foo(const Foo&amp;)&quot; &lt;&lt; endl; &#125; // copy ctor</span><br><span class="line">	Foo(Foo&amp;&amp; ref)&#123; cout &lt;&lt; &quot;Foo(Foo&amp;&amp;)&quot; &lt;&lt; endl; &#125;          // move ctor</span><br><span class="line">	Foo&amp; operator=(const Foo&amp; rhs)&#123;cout &lt;&lt; &quot;Foo&amp; operator=(const Foo&amp; rhs)&quot; &lt;&lt; endl; &#125; // copy assignment</span><br><span class="line">	Foo&amp; operator=(Foo&amp;&amp; rhs)&#123;cout &lt;&lt; &quot;Foo&amp; operator=(Foo&amp;&amp; rhs)&quot; &lt;&lt; endl; &#125;           // move assignment </span><br><span class="line">	~Foo()&#123; cout &lt;&lt; &quot;~Foo()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	Foo foo1 = Foo();</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	foo1 = Foo();</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	Foo  foo2 = foo1;</span><br><span class="line">	cout&lt;&lt;&quot;==========&quot;&lt;&lt;endl;</span><br><span class="line">	foo2 = foo1;</span><br><span class="line">        getchar();</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实参类型为non-const lvalue reference、const lvalue reference、 const rvalue reference可以匹配到copy ctor和copy assignment。</p>
+<p>实参类型为non-const rvalue reference 才能匹配到 move ctor和 move assignment 。</p>
+<p>通过这样的方式，让 Foo foo1 &#x3D; Foo()或 foo1 &#x3D; Foo()这样的表达式，都可以匹配到 move 语意的版本。</p>
+<p>与此同时，让 Foo foo2 &#x3D; foo1 或 foo2 &#x3D; foo1 这样的表达式，依然使用 copy 语意的版本。</p>
+<p>达到以上效果需要编译时加上-fno-elide-constructors，以此关闭编译器省略创建一个只是为了初始化另一个同类型对象的临时对象的优化。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">struct Foo</span><br><span class="line">&#123;</span><br><span class="line">	Foo(int a) :a(a)&#123;&#125;</span><br><span class="line">	int a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void test1(Foo&amp;&amp; f)</span><br><span class="line">&#123;</span><br><span class="line">// 对于任何类型为 右值引用的变量（当然也包括函数参数），只能由右值来初始化；</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test2(Foo&amp; f)</span><br><span class="line">&#123;</span><br><span class="line">//  一个右值，不能被 T&amp; 类型的参数匹配；毕竟这种可以修改的承诺。而修改一个调用后即消失的临时</span><br><span class="line">//  对象上，没有任何意义，反而会导致程序员犯下潜在的错误，因而还是禁止了最好</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test3(const Foo&amp; f)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;	</span><br><span class="line"></span><br><span class="line">Foo f1(1);</span><br><span class="line">test1(f1);  // wrong  cannot bind ‘Foo’ lvalue to ‘Foo&amp;&amp;’ 不能将一个左值绑定到右值引用</span><br><span class="line">test2(f1);  // ok</span><br><span class="line">test3(f1);  // ok</span><br><span class="line"></span><br><span class="line">test1(Foo&#123;1&#125;);  // ok      Foo&#123;1&#125;是右值</span><br><span class="line">test2(Foo&#123;1&#125;);  // wrong   这种做法无意义,invalid initialization of non-const reference of type ‘Foo&amp;’ from an rvalue of type ‘Foo’</span><br><span class="line">test3(Foo&#123; 1 &#125;);  // ok</span><br><span class="line"></span><br><span class="line">// ref是左值虽然其类型是右值引用; </span><br><span class="line">// 一个类型为 右值引用的变量，一旦被初始化之后，临时对象的生命将被扩展，会在其被创建的 scope 内始终有效。</span><br><span class="line">// 看似 ref 被定义的类型为 右值引用，但这仅仅约束它的初始化：只能从一个 右值进行初始化。</span><br><span class="line">// 但一旦初始化完成，它就和一个 左值引用再也没有任何差别：都是一个已存在对象的 标识。</span><br><span class="line">Foo&amp;&amp; ref = Foo&#123;1&#125;; </span><br><span class="line">test1(ref);    // wrong  ref是左值,test1的形参为右值引用,右值引用的变量只能由右值来初始化 cannot bind ‘Foo’ lvalue to ‘Foo&amp;&amp;’</span><br><span class="line">test2(ref); // ok  </span><br><span class="line">test3(ref); // ok</span><br></pre></td></tr></table></figure>
+
+<h2 id="速亡值"><a href="#速亡值" class="headerlink" title="速亡值"></a>速亡值</h2><p>只有右值临时对象可以初始化右值引用变量，从而也只有右值临时变量能够匹配参数类型为 右值引用（T&amp;&amp;）的函数，包括 move 构造函数。</p>
+<p>如果程序员就是想把一个左值 move 给另外一个对象，该怎么办？最简单的选择是通过 static_cast 进行类型转换：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Foo foo&#123;10&#125;;           // foo为左值</span><br><span class="line">Foo&amp;&amp; ref = Foo&#123;10&#125;;   // ref为左值  类型为右值引用</span><br><span class="line">Foo obj1 = static_cast&lt;Foo&amp;&amp;&gt;(foo); // move 构 造</span><br><span class="line">Foo obj2 = static_cast&lt;Foo&amp;&amp;&gt;(ref); // move 构 造</span><br></pre></td></tr></table></figure>
+
+<p>我们之前说过，只有 右值，才可以用来初始化一个 右值引用类型的变量，因而也只有 右值才能匹配 move构造。</p>
+<p>所以，static_cast&lt;Foo&amp;&amp;&gt;(foo) 表达式，肯定是一个 右值。</p>
+<p>但同时，它返回的类型又非常明确的是一个 引用，而这一点又不符合 右值的定义。</p>
+<p>因为，所有的右值，都必须是一个 具体类型，不能是不完备类型，也不能是抽象类型，但 引用，无论左值引用，还是右值引用，都可以是不完备类型的引用或抽象类型的引用。这是 左值才有的特征。</p>
+<p>对于这种既有左值特征，又和右值临时对象一样，可以用来初始化右值引用类型的变量的表达式，只能将其归为新的类别。C++11 给这个新类别命名为 速亡值 (eXpiring value，简称 xvalue)。</p>
+<p>而将原来的 右值，重新命名为 纯右值。而 速亡值和 纯右值合在一起，称为 右值，其代表的含义是，所有可以直接用来初始化 右值引用类型变量的表达式。</p>
+<p>同时，由于 速亡值又具备左值特征：可以是不完备类型，可以是抽象类型，可以进行运行时多态。所以，速亡值又和 左值一起被归类为 泛左值（generalized lvalue, 简称 glvalue)。</p>
+<p>From</p>
+<blockquote>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/595114215">https://zhuanlan.zhihu.com/p/595114215</a></p>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>顶层Const和底层Const</title>
+    <url>/2023/09/04/%E9%A1%B6%E5%B1%82Const%E5%92%8C%E5%BA%95%E5%B1%82Const/</url>
+    <content><![CDATA[<h2 id="顶层-const-和底层-const"><a href="#顶层-const-和底层-const" class="headerlink" title="顶层 const 和底层 const"></a>顶层 const 和底层 const</h2><p>从 const 指针开始说起。const int* pInt; 和 int *const pInt &#x3D; &amp;someInt;，前者是 *pInt 不能改变，而后者是 pInt 不能改变。因此指针本身是不是常量和指针所指向的对象是不是常量就是两个互相独立的问题。用顶层表示指针本身是个常量，底层表示指针所指向的对象是个常量。</p>
+<h2 id="拷贝与顶层和底层-const"><a href="#拷贝与顶层和底层-const" class="headerlink" title="拷贝与顶层和底层 const"></a>拷贝与顶层和底层 const</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int *const p1 = &amp;i;     //  不能改变 p1 的值，这是一个顶层</span><br><span class="line">const int ci = 42;      //  不能改变 ci 的值，这是一个顶层</span><br><span class="line">const int *p2 = &amp;ci;    //  允许改变 p2 的值，这是一个底层</span><br><span class="line">const int *const p3 = p2;   //  靠右的 const 是顶层 const，靠左的是底层 const</span><br><span class="line">const int &amp;r = ci;      //  所有的引用本身都是顶层 const，因为引用一旦初始化就不能再改为其他对象的引用，这里用于声明引用的 const 都是底层 const</span><br></pre></td></tr></table></figure>
+
+<p>相关问题：</p>
+<p>为什么不能在一个常量对象中调用非常成员函数？</p>
+<p>因为在默认情况下，this的类型是指向类的非常量版本的常量指针（意思是this的值不能改变，永远指向那个对象，即“常量指针”，但是被this指向的对象本身是可以改变的，因为是非常量版本，这里this相当于是顶层const），而this尽管是隐式的，它仍然需要遵循初始化规则，普通成员函数的隐式参数之一是一个底层非const指针，在默认情况下我们无法把一个底层const的this指针转化为非const的this指针，因此我们不能在常量对象上调用普通的成员函数。因此在上例中，形参列表后的const就意味着默认this指针应该是一个底层const, 类型是 const ClassName&amp;。而非常对象却可以调用常成员函数，因为底层非const可以默认转化为底层const。</p>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>override和final说明符</title>
+    <url>/2023/09/07/override%E5%92%8Cfinal%E8%AF%B4%E6%98%8E%E7%AC%A6/</url>
+    <content><![CDATA[<h2 id="分清重写，重载和隐藏"><a href="#分清重写，重载和隐藏" class="headerlink" title="分清重写，重载和隐藏"></a>分清重写，重载和隐藏</h2><ul>
+<li><p>重载（overload）, 它通常是指在同一个类中有两个或两个以上的函数，它们的函数名相同，但是函数签名不同，也就是说有不同的形参。</p>
+</li>
+<li><p>重写（ovrride）的意思更接近覆盖， 在C++中是指派生类覆盖了基类的虚函数</p>
+</li>
+<li><p>隐藏（overwrite）是指基类成员函数，无论它是是否是为虚函数，当派生类出现同名函数时，如果派生类函数签名不同于基函数，则基类函数会被隐藏。如果派生类函数签名与基函数相同，则需要确定基类函数是否为虚函数，如果时虚函数这里的概念就是重写，否则基类函数也会被隐藏。</p>
+</li>
+</ul>
+<h3 id="override-说明符"><a href="#override-说明符" class="headerlink" title="override 说明符"></a>override 说明符</h3><ul>
+<li>检查是否符合重写规则,让编译器来检查我们又没有正确覆写父类的虚函数。因此，任何子类覆写虚函数后导致函数签名的变化，都会导致编译器报错。</li>
+</ul>
+<p>-如果你一直使用override，他还会给你带来一个意想不到的收获：在C++11之前，关于子类覆写父类虚函数后，子类的虚函数还要不要加virtual关键字，还是个值得争论的问题。人们一开始之所以想在子类的覆写函数上也加上virtual，就是为了提醒读代码的人这是个覆写的虚函数。但是在有了override之后，这个关键字本身就起了这个作用，之前的做法也就不是必须的了。所以建议的做法是，在最顶层的虚函数上加上virtual关键字后，其余的子类覆写后就不再加virtual了，但是要统一加上override</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Base&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void some_func() &#123;&#125;</span><br><span class="line">    virtual void foo(int x)  &#123;&#125;</span><br><span class="line">    virtual void far() const &#123;&#125;</span><br><span class="line">    void baz() &#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Derived :public Base&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void sone_func() override &#123;&#125; // ERROR,编译器报警没有正确覆写Base::some_func</span><br><span class="line">    virtual void foo(int &amp;x) override &#123;&#125; // ERROR,编译器报警没有正确覆写Base::foo</span><br><span class="line">    virtual void bar() override &#123;&#125; // ERROR,编译器报警没有正确覆写Base::far</span><br><span class="line">    virtual void baz() override &#123;&#125; // ERROR,编译器报警没有正确覆写Base::baz</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="final说明符"><a href="#final说明符" class="headerlink" title="final说明符"></a>final说明符</h3><ul>
+<li>阻止派生类去继承基类虚函数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Base&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void foo(int x) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Derived : public Base&#123;</span><br><span class="line">public:</span><br><span class="line">    void foo(int x) final &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Derived2 : public Derived&#123;</span><br><span class="line">public:</span><br><span class="line">    void foo(int x) &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>阻止类被作为基类</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Base final &#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void foo(int x)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Derived : public Base&#123;   //ERROR</span><br><span class="line">public:</span><br><span class="line">    void foo(int x)&#123;&#125;  //ERROR</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="如何更新你的代码"><a href="#如何更新你的代码" class="headerlink" title="如何更新你的代码"></a>如何更新你的代码</h2><p>如果你的代码已经非常冗长并且到处都是覆写的虚函数，这个时候你想用final和override来更新你的代码库，我会给你以下建议：</p>
+<ul>
+<li>在处理final时应该慎之又慎，需要case by case地处理。</li>
+<li>至于override，无论哪里用到了覆写，直接加上去就完事了，只会有益处而不会有害，不过看清楚你的本意到底是不是覆写哈。尤其是你加上override后编译器报错的，一定要先检查你的本意到底是不是覆写，确定你真的犯了错误后，再去修改源代码。</li>
+<li>加上override后，我建议你把子类的virtual关键字去掉，并且以后都遵循上边提到的规范：只有顶层的虚函数加上virtual，其余子类在覆写时全部用override来标记。</li>
+<li>当你看到一个函数标记了virtual时，弄清楚它是不是顶层虚函数其实是一件非常困难的事情，这个时候我建议你多用用你的编译器，当你使用override报错时，也有可能它确实就是顶层virtual函数了。</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>override和final都能帮助我们改善虚函数相关的安全性，使用final需要更多的权衡但是override就尽管大胆地用吧。</p>
+]]></content>
+      <categories>
+        <category>每日C++</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+</search>
